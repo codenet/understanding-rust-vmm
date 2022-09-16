@@ -2,7 +2,7 @@
 
 A brief description of how block devices are implemented in [vmm-reference](https://github.com/codenet/vmm-reference)
 
-Currently, the Block device implemented in this file only uses the Memory Mapped Input/Output (MMIO). A block device is a part of more general virtual io devices present in the `vmm-reference`. It uses many [rust-vmm](https://github.com/rust-vmm) crates and traits such as `vm-vrtio` and `vm-device`. We will first see what is the structure of a block device, and then what all methods and traits this strcture implements.
+Currently, the Block device implemented in this file only uses the Memory Mapped Input/Output (MMIO). A block device is a part of more general virtual io devices present in the `vmm-reference`. It uses many [rust-vmm](https://github.com/rust-vmm) crates and traits such as `vm-virtio` and `vm-device`. We will first see what is the structure of a block device, and then what all methods and traits this strcture implements.
 
 ## Structure
 
@@ -46,7 +46,7 @@ The call chain that invokes this method is,
 main.rs -> Vmm::try_from -> Vmm::add_block_device -> Block::new
 ```
 
-The coniguration of the block device to be used in VM is passed as a command line argument. `main.rs` parses this argument and passes a configuration object to the `Block::new` via the call chain. The `Block::new` method then uses this configuration to create a new block device object.
+The configuration of the block device to be used in VM is passed as a command line argument. `main.rs` parses this argument and passes a configuration object to the `Block::new` via the call chain. The `Block::new` method then uses this configuration to create a new block device object.
 
 An important trait implemented by `Block` is `VirtioDeviceActions`, which is present in [vm-vrtio](https://github.com/rust-vmm/vm-virtio/tree/main/crates/virtio-device) package of `rust-vmm`.
 
