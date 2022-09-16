@@ -112,7 +112,7 @@ This method tries to push an entry (`SegmentDescriptor` object) to the GDT and i
 ```rs
 pub fn create_kvm_segment_for(&self, index: usize) -> Option<kvm_segment> 
 ```
-This method creates and returns `kvm_segmet` for the GDT entry at given index. 
+This method creates and returns `kvm_segment` for the GDT entry at given index. 
 <br/><br/>
 
 ### `write_to_mem`
