@@ -2,7 +2,7 @@
 
 A brief description of how block devices are implemented in [vmm-reference](https://github.com/codenet/vmm-reference)
 
-Currently, the Block device implemented in this file only uses the Memory Mapped Input/Output (MMIO). A block device is a part of more general virtual io devices present in the `vmm-reference`. It uses many [rust-vmm](https://github.com/rust-vmm) crates and traits such as `vm-vritio` and `vm-device`. We will first see what is the structure of a block device, and then what all methods and traits this strcture implements.
+Currently, the Block device implemented in this file only uses the Memory Mapped Input/Output (MMIO). A block device is a part of more general virtual io devices present in the `vmm-reference`. It uses many [rust-vmm](https://github.com/rust-vmm) crates and traits such as `vm-vrtio` and `vm-device`. We will first see what is the structure of a block device, and then what all methods and traits this strcture implements.
 
 ## Structure
 
@@ -79,7 +79,7 @@ impl<M: GuestAddressSpace + Clone + Send + 'static> VirtioDeviceType for Block<M
 
 > `VirtioDeviceType` is a trait implemented by virtio devices. Hence, also implemented by [Net](https://github.com/codenet/vmm-reference/blob/main/src/devices/src/virtio/net/device.rs). Because `Block` also implements `VirtioDeviceActions` trait, `Borrow` and `BorrowMut` traits are also implemeted by `Block`.
 
-`Block` also implements `VirtioMmioDevice` trait, which is also present in [vm-vrtio](https://github.com/rust-vmm/vm-virtio/tree/main/crates/virtio-device) package of `rust-vmm`. `Block` uses default implementations of read and write operations provided by this trait. The description of `VirtioMmioDevice` according to it's developer is,
+`Block` also implements `VirtioMmioDevice` trait, which is also present in [vm-virtio](https://github.com/rust-vmm/vm-virtio/tree/main/crates/virtio-device) package of `rust-vmm`. `Block` uses default implementations of read and write operations provided by this trait. The description of `VirtioMmioDevice` according to it's developer is,
 > A common interface for Virtio devices that use the MMIO transport, which also provides a default implementation of read and write operations from/to the device registers and configuration space.
 
 The last trait implemented by `Block` is `MutDeviceMmio` of [vm-device](https://github.com/rust-vmm/vm-device/blob/main/src/lib.rs) trait in `rust-vmm`. This trait has two functions,
