@@ -5,7 +5,7 @@ This module uses [Linux-loader](https://github.com/rust-vmm/linux-loader) and [v
 ```rs
 const KERNEL_BOOT_FLAG_MAGIC: u16 = 0xaa55;
 ```
-Header field: `boot_flag`. Must contain 0xaa55. This is the closest thing old Linux kernels have to a magic number. The 0xAA55 signature is the last two bytes of the first sector of your bootdisk (bootsector/Master Boot Record/MBR). If it is 0xAA55, then the BIOS will try booting the system. If it's not found (it garbled or 0x0000), you'll get an error message from your BIOS that it didn't find a bootable disk
+Header field: `boot_flag`. Must contain 0xaa55. This is the closest thing old Linux kernels have to a magic number. The 0xAA55 signature is the last two bytes of the first sector of your bootdisk (bootsector/Master Boot Record/MBR). If it is 0xAA55, then the BIOS will try booting the system. If it's not found (garbled or 0x0000), you'll get an error message from your BIOS that it didn't find a bootable disk
 
 ```rs
 const KERNEL_HDR_MAGIC: u32 = 0x5372_6448;
