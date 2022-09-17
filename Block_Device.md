@@ -4,10 +4,9 @@ The main task of VirtIO devices is to communicate the data between VM and host.
 Three main data structures are maintained to facilitate this communication.
 1) Available ring - Can be read by Host and Guest but only Guest can write to it. 
 It is primarily used to communicate the requests to the host.
-2) Descriptor ring holds the base, length, Read/Write access, n
-ext pointer (used for chaining of multiple descriptor pointers) to the guest memory.
-3) Available ring - only device can write to it contains the decriptors which 
-are to be communicated to the device (host).
+2) Descriptor ring holds the base, length, Read/Write access, next pointer (used for chaining of multiple descriptor pointers) to the guest memory.
+3) Used ring - only device can write to it contains the decriptors which 
+are to be communicated to the driver (guest).
 
 High level operation of VirtIO devices
 
