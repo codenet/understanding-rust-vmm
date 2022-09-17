@@ -1,8 +1,10 @@
 # SimpleHandler
 
-It maintains a pair of queue `RX/TX`. These queues would be used for packets tranfer(communication) between VM and `net` device. This is used along with MMIO between the guest and the devices. 
+**File Path** - vmm-reference/src/devices/src/virtio/net/simple_handler.rs  
 
-It is used in the `QueueHandler` in the net device.
+SimpleHandler object maintains a pair of queue `RX/TX`. These queues would be used for packets transfer(communication) between VM and `net` device. These queues facilitate in MMIO between guest and devices.
+
+SimpleHandler is used in the `QueueHandler` in the net device.
 
 ```rs
 pub struct SimpleHandler<M: GuestAddressSpace, S: SignalUsedQueue> {
@@ -16,10 +18,10 @@ pub struct SimpleHandler<M: GuestAddressSpace, S: SignalUsedQueue> {
 }
 ```
 - `driver_notify` gets an instance of `SingleFdSignalQueue` which is used in notification to driver about the used queue events. 
-- `rxq`(for receiving) and `txq`(for transmiting) are instances of rust's `Queue` which is present in the `virtio queue` interface. It consist of Descriptor tables, Available Ring, Used Ring. Descriptor contains information of length and address of buffer in the guest address space. 
+- `rxq`(for receiving) and `txq`(for transmiting) are instances of rust's `Queue` which is present in the [virtio-queue](https://github.com/rust-vmm/vm-virtio/blob/main/crates/virtio-queue/README.md) interface. It consist of Descriptor tables, Available Ring, Used Ring. Descriptor contains information of length and address of buffer in the guest address space. 
 - `tap` is an interface which provides virtual machines access to physical network. 
 
-`iter` of queue consumes over all descriptor heads in queue to return a chain. `DescriptorChain` can be used to parse descriptors provided by the device, which represent input or output memory areas for device I/O.
+`iter` method of `Queue` consumes over all descriptor heads in queue to return a chain. `DescriptorChain` can be used to parse descriptors provided by the device, which represent input or output memory areas for device I/O.
 
 ## Methods
 ```rs
@@ -37,13 +39,13 @@ This method reads frames from the tap into the `rxbuf` of simple_handler object.
 ```rs
     fn write_frame_to_guest(&mut self) -> result::Result<bool, Error>
 ```
-This method is invoked in `process_tap` method. It iter over the `rxq` to check for descriptors for receving. If found any, frames from  `rxbuf` is written to the address space specified by descriptors in the `DescriptionChain`.
+This method is invoked in `process_tap` method. It iters over the `rxq` to check for descriptors for receving. If found any, frames from  `rxbuf` are written to the address space specified by descriptors in the `DescriptionChain`.
 <hr>
 
 ```rs
     pub fn process_txq(&mut self) -> result::Result<(), Error>
 ```
-For transmission, it gets the descriptors chain by iterating over the `txq`. Here the descriptors points the address space containing the frames that needs to be transmitted. It calls `send_frame_from_chain`
+For transmission, it gets the descriptors chain by iterating over the `txq`. Here the descriptors points the address space containing the frames that needs to be transmitted. It then calls `send_frame_from_chain`
 <hr>
 
 ```rs
@@ -52,11 +54,8 @@ For transmission, it gets the descriptors chain by iterating over the `txq`. Her
         chain: &mut DescriptorChain<M::T>,
     ) -> result::Result<u32, Error>
 ```
-It iterates over chain to read data from guest address space into `txbuf`. Using `txbuf` it further writes data into tap device. 
+It iterates over chain to read data from guest address space into `txbuf`. Using `txbuf` it further writes data into the tap device. 
 <hr>
 
-## Resources for more understanding
-
-- https://github.com/rust-vmm/vm-virtio/blob/main/crates/virtio-queue/README.md
 
 
