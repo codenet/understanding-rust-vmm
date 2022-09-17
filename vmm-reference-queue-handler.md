@@ -1,4 +1,4 @@
-# [Queue Handler](./../src/devices/src/virtio/net/queue_handler.rs)
+# [Queue Handler](https://github.com/codenet/vmm-reference/blob/main/src/devices/src/virtio/net/queue_handler.rs)
 
 `Queue Handler` uses Simple Handler for handling RX\TX Queues
 
