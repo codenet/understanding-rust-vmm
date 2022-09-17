@@ -151,8 +151,14 @@ fn default() -> Self {
 
 ## IDT
 This file also provides a method `write_idt_value` to write val in the IDT Offset (equals `0x520`).
-<br/><br/>
-
+```rs
+pub fn write_idt_value<Memory: GuestMemory>(val: u64, guest_mem: &Memory) -> Result<()> {
+    let boot_idt_addr = GuestAddress(BOOT_IDT_OFFSET);
+    guest_mem
+        .write_obj(val, boot_idt_addr)
+        .map_err(Error::GuestMemory)
+}
+```
 <br/><br/>
 
 ### Uses in the codebase
