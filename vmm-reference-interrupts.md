@@ -1,6 +1,6 @@
 # Interrupts (x86_64 architecture)
-* source file: vmm-reference/src/vm-vcpu/src/x86_64/interrupts.rs 
-* Note: This document only covers the x86_64 architecture. For aarch64, the interrupt controller is called GIC (Generic Interrupt Controller). Refer to vmm-reference/src/vm-vcpu/src/aarch64/interrupts.rs
+* source file: vmm-reference/src/vm-vcpu-ref/src/x86_64/interrupts.rs 
+* Note: This document only covers the x86_64 architecture. For aarch64, the interrupt controller is called GIC (Generic Interrupt Controller). Refer to vmm-reference/src/vm-vcpu-ref/src/aarch64/interrupts.rs
 ## Local Advanced Programmable Interrupt Controller (LAPIC)
 LAPIC is a memory-mapped device that is used to send interrupts to the VCPUs. It is used to send interrupts to the VCPUs and to receive interrupts from the VCPUs. It is also used to send inter-processor interrupts (IPIs) to the VCPUs.
 
@@ -30,25 +30,22 @@ The function `set_klapic_delivery_mode` sets the delivery mode from available de
 
 There are two helper functions defined to read and write to the LAPIC registers. The `read_le_i32` function reads from the LAPIC register at the given offset and returns the value read. 
 ```rust
-pub fn get_klapic_reg(klapic: &kvm_lapic_state, reg_offset: usize) -> Result<i32> {
-    let range = reg_offset..reg_offset + 4;
-    let reg = klapic.regs.get(range).ok_or(Error::InvalidRegisterOffset)?;
-    Ok(read_le_i32(reg))
+fn read_le_i32(input: &[i8]) -> i32 {
+    assert_eq!(input.len(), 4);
+    let mut array = [0u8; 4];
+    for (byte, read) in array.iter_mut().zip(input.iter().cloned()) {
+        *byte = read as u8;
+    }
+    i32::from_le_bytes(array)
 }
 ```
 
 The `write_le_i32` function writes the given value to the LAPIC register at the given offset.
 ```rust
-pub fn set_klapic_reg(klapic: &mut kvm_lapic_state, reg_offset: usize, value: i32) -> Result<()> {
-    // The value that we are setting is a u32, which needs 4 bytes of space.
-    // We're here creating a range that can fit the whole value.
-    let range = reg_offset..reg_offset + 4;
-    let reg = klapic
-        .regs
-        .get_mut(range)
-        .ok_or(Error::InvalidRegisterOffset)?;
-    write_le_i32(reg, value);
-    Ok(())
+fn write_le_i32(buf: &mut [i8], n: i32) {
+    for (byte, read) in buf.iter_mut().zip(i32::to_le_bytes(n).iter().cloned()) {
+        *byte = read as i8;
+    }
 }
 ```
 The helper functions `get_klapic_reg` uses the `read_le_i32` function to read from the LAPIC register at the given offset and returns the value read. The values are stored as `i32` which requires 4 `i8` values. Hence, the range is defined as `reg_offset..reg_offset + 4`. 
