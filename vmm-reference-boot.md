@@ -103,7 +103,7 @@ This function builds boot parameters for ELF kernels following the Linux boot pr
 * `mmio_gap_start` - address where the MMIO gap starts.
 * `mmio_gap_end` - address where the MMIO gap ends.
 
-It checks whether `mmio_gap_start >= mmio_gap_end` otherwise throws the `MmioGapStartPastMmioGapEnd` error. \
+It checks whether `mmio_gap_start < mmio_gap_end` otherwise throws the `MmioGapStartPastMmioGapEnd` error. \
 First `params` is declared as the default for `boot_params` from the linux-loader.
 Then we set the headers in `params` using the constants declared earlier.
 
