@@ -2,6 +2,7 @@
 
 This module uses [Linux-loader](https://github.com/rust-vmm/linux-loader) and [vm-memory](https://github.com/rust-vmm/vm-memory) crates to provide functionality for building boot parameters for ELF kernels following the [Linux boot protocol](https://www.kernel.org/doc/Documentation/x86/boot.txt).
 
+Described below are the constant headers of the Boot parameters -
 ```rs
 const KERNEL_BOOT_FLAG_MAGIC: u16 = 0xaa55;
 ```
