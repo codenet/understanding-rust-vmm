@@ -41,7 +41,7 @@ let mut bootparams = build_bootparams(
     GuestAddress(MMIO_GAP_END),
 )
 ```
-- Next, we have the function `build_bootparams` which helps in setting up the boot parameters required by the kernel to properly boot. This includes setting up the memory region where the kernel code can run and getting the header parameters from the kernel. Apart from this, it also helps in setting up the E820 entries in the memory which is basically the reserved regions for MMIO.
+- Next, we have the function `build_bootparams` which helps in setting up the boot parameters required by the kernel to properly boot. This includes setting up the memory region where the kernel code can run and getting the header parameters from the kernel. Apart from this, it also helps in setting up the E820 entries in the memory which helps the OS in getting to know the memory mapped regions(like the addresses reserved for MMIO) in the RAM which the kernel can't use for itself. 
 
 ```rust
 // Add the kernel command line to the boot parameters.
