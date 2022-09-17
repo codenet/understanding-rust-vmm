@@ -22,6 +22,22 @@ let device_mgr = Arc::new(Mutex::new(IoManager::new()));
 In `try_from` method implemented for Vmm, the device manager object is being created of `Arc<Mutex>` type over `IoManager` so that it can be shared between multiple threads.s
 
 ```rust
+fn try_from(config: VMMConfig) -> Result<Self> {
+        ...
+        let device_mgr = Arc::new(Mutex::new(IoManager::new()));
+        ...
+        let mut vmm = Vmm {
+            ...
+            device_mgr,
+            ...
+        };
+        vmm.add_serial_console()?;
+        ...
+        Ok(vmm)
+    }
+```
+
+```rust
 pub struct IoManager {
     pio_bus: PioBus<Arc<dyn DevicePio + Send + Sync>>,
     mmio_bus: MmioBus<Arc<dyn DeviceMmio + Send + Sync>>,
