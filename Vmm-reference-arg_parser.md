@@ -1,9 +1,9 @@
 # [Arg Parser](https://github.com/codenet/vmm-reference/blob/main/src/vmm/src/config/arg_parser.rs)
 
 ## Usage 
-`Arg Parser` is used to read the command line arguments which will be given for intializing the vmm. These arguments are passed to the vmm_config. The vmm config will check if these arguments are correct or not and accordingly successfully configure the vmm, or throw error. To know that there are not errors in giving the command line arguments itself, we need to make the arg_parser robust for handing such input errors.
+`Arg Parser` is used to read the command line arguments, which will be given for initializing the vmm. These arguments are passed to the vmm_config. The vmm config will check if these arguments are correct or not and accordingly successfully configure the vmm or throw an error. To know that there are no errors in giving the command line arguments itself, we need to make the arg_parser robust for handling such input errors.
 
-## Code explaination:
+## Code explanation:
 
 ```rs
 use std::collections::HashMap;
@@ -11,7 +11,7 @@ use std::fmt;
 use std::str::FromStr;
 ```
 
-Improting the builtin Data Structures Hash maps, fmt for formattting and Displaying the string, and FromStr to parse the string.
+Importing the built-in Data Structures Hash maps, fmt for formatting and displaying the string, and FromStr to parse the string.
 
 
 ```rs
@@ -20,8 +20,8 @@ pub(super) enum CfgArgParseError {
     UnknownArg(String),
 }
 ```
-These represent the two types of error the arg parser will handle.  
-1. **ParsingFailed:** This error will be thrown their is an issue with parsing of known parameters. The value of the parameter, or no value is passed.
+These represent the two types of errors the arg parser will handle.  
+1. **ParsingFailed:** This error will be thrown if there is an issue with the parsing of known parameters. The value of the parameter or no value is passed.
 2. **UnknownArg:** For unknown arguments given by the user. This will be thrown if some unknown parameters have been passed.
 
 ```rs 
@@ -37,16 +37,16 @@ impl fmt::Display for CfgArgParseError {
 }
 ```
 
-`match` compares which enum type is called. As discussed above there are two functions for handling the error.  
-1. If `CfgArgParseError::ParsingFailed` is called, then match will switch to the Parsing failed function and print the message describing at which parameter we have the error and what is the error message.
-2. If `CfgArgParseError::UnknownArg` is called, then match will switch to the Unknown Arg function and simply print the error message, we have probably given somee paramter which is not required.
+`match` compares which enum type is called. As discussed above, there are two functions for handling errors.  
+1. If `CfgArgParseError::ParsingFailed` is called, then the match will switch to the parsing failed function and print the message describing at which parameter we have the error and what the error message is.
+2. If `CfgArgParseError::UnknownArg` is called, then match will switch to the Unknown Arg function and simply print the error message. We have probably given some parameters which are not required.
 
 ```rs
 pub(super) struct CfgArgParser {
     args: HashMap<String, String>,
 }
 ```
-This will contain all the Arguments, the parameter name is a String key and it's value is a Sttring. They will be stored in hash map. Next they have implemented the CfgArgParser Class, which contains the following functions: new, value_of, all_consumed
+This will contain all the arguments. The parameter name is a string key and it's value is a String. They will be stored in a hash map. Next they implemented the CfgArgParser Class, which contains the following functions: new, value_of, all_consumed
 
 ```rs 
 pub(super) fn new(input: &str) -> Self {
@@ -63,7 +63,7 @@ pub(super) fn new(input: &str) -> Self {
     Self { args }
 }
 ```
-We are splitting the arguments by comma and then filtering out the emty tokens (since they have no information). Splitin will separate the values using the equal to sign, and return 2 substrings from the given token. The first value is the paramter name and the second value is the value of the paramteter. These key value pairs are inserted in the hashmaps and returned by the function.
+We are splitting the arguments by commas and then filtering out the empty tokens (since they have no information). splitn will separate the values using the equal to sign and return 2 substrings from the given token. The first value is the parameter name, and the second value is the value of the parameter. These key-value pairs are inserted into the hashmaps and returned by the function.
 
 ```rs
 pub(super) fn value_of<T: FromStr>(
@@ -82,7 +82,7 @@ where
     }
 } 
 ```
-This will read the value of the parameter from the Hashmap and also delete it from the Hashmap at the same time. If the value is empty then the ParsingFailed error is thrown telling the user that their is some error with accessing this Paramter.
+This will read the value of the parameter from the Hashmap and also delete it from the Hashmap at the same time. If the value is empty, then the ParsingFailed error is thrown, telling the user that there is some error with accessing this parameter.
 
 
 ```rs
@@ -94,7 +94,7 @@ pub(super) fn all_consumed(&self) -> Result<(), CfgArgParseError> {
     }
 }
 ```
-This checks if all the arguments have been consumed or not. If there are are some arguments that are left to use, it means they weree either extra or some information is still not used. In both the cases, UnknownArg error is thrown.
+This checks if all the arguments have been consumed or not. If there are some arguments that are left to use, it means they are extra, or some information is still not used. In both cases, an unknown arg error is thrown.
 
 ```rs 
 impl fmt::Display for CfgArgParser {
@@ -104,14 +104,14 @@ impl fmt::Display for CfgArgParser {
             "{}",
             self.args
                 .keys()
-                .map(|val| val.as_str())
+                .map(|val| Val.as_str())
                 .collect::<Vec<&str>>()
                 .join(", ")
         )
     }
 }
 ```
-This will display the arguments that have collected in the `args` hashmap.
+This will display the arguments that have been collected in the `args` Hashmap.
 
 
 ```rs 
@@ -142,7 +142,7 @@ mod tests {
         );
         assert_eq!(arg_parser.value_of::<u64>("int")?.unwrap(), 123);
 
-        // Params now is empty, use the Default instead.
+        // Params now is empty, use the default instead.
         let default = 12;
         assert_eq!(arg_parser.value_of("int")?.unwrap_or(default), default);
 
@@ -161,13 +161,13 @@ mod tests {
     }
 }
 ```
-This is sample code to test our arg parser. We have given an input which contains different parameters, comma separated from each other. The values of the parameters are written ahead of them after eequal to sign. Then we checking out args data using asset statements. The assert statements work as follows:  
+This is a sample code to test our arg parser. We have given an input that contains different parameters and is comma-separate from each other. The values of the parameters are written ahead of them after the equal to sign. Then we checked out args data using assert statements. The assert statements work as follows:  
 
 1. 
 ```rs
 assert!(arg_parser.all_consumed().is_err());
 ``` 
-First we will check if all the paramters have been consumed or not. We are asserting that some error should be thrown in this case. Which is true, an error will be thrown because we have not used any parameters yet and they are present in the args. Hence this assertion is true.
+First we will check if all the parameters have been consumed or not. We are asserting that some error should be thrown in this case. This is true, an error will be thrown because we have not used any parameters yet and they are present in the args. Hence this assertion is true.
 
 2. 
 ```rs 
@@ -185,26 +185,26 @@ assert_eq!(
 );
 assert_eq!(arg_parser.value_of::<u64>("int")?.unwrap(), 123);
 ```
-assert_eq check is the 2 values written are equal or not. All of these statements are true. The value of "path" argument is "/path" as passed in the input string. Simillarly the value of "string" is "HelloWorld", "u8" is 1 and integer value of "int" is 123.  Hence all of these asserions are true. Also by this time all the parameters in the args have been consumed.
+assert_eq checks whether the 2 values written are equal or not. All of these statements are true. The value of the "path" argument is "/path" as passed in the input string. Similarly, the value of "string" is "HelloWorld", "u8" is 1 and the integer value of "int" is 123. Hence, all of these assertions are true. Also, by this time, all the parameters in the args have been consumed.
 
 3. 
 ```rs 
 let default = 12;
 assert_eq!(arg_parser.value_of("int")?.unwrap_or(default), default);
 ```
-Now since we have consumed the "int" parameter, this means it is not present in the args. So a default value can be provided. This assertion checks if the default works correctly or not.
+Now, since we have consumed the "int" parameter, this means it is not present in the args. So a default value can be provided. This assertion checks if the default works correctly or not.
 
 4.
 ```rs 
 assert!(arg_parser.value_of::<u64>("int")?.is_none());
 ```
-In case no default value is provided, it should return none and we are checking if it is none using "is_none". Hence this assertion is also true.
+If no default value is provided, it should return none, and we are checking if it is none using "is_none". Hence, this assertion is also true.
 
 5.
 ```rs 
 assert!(arg_parser.all_consumed().is_ok());
 ```
-Since all the params have been consumed by now, this will return true. Hence the is_ok() will return true and our assertion is correct.
+Since all the params have been consumed by now, this will return true. Hence the is_ok() will return true, and our assertion is correct.
 
 6. 
 ```rs
@@ -213,6 +213,6 @@ assert!(CfgArgParser::new(input_params)
     .value_of::<String>("path")?
     .is_none());
 ```
-Now we are adding a new param into the args map, notice that we have not given any value to the parameter. So the value should be none. We are assertting that the none is returned or not and hence our assertion is true.
+Now we are adding a new parameter into the args map. Notice that we have not given any value to the parameter. So the value should be none. We are asserting that none is returned whether it is true or not. Hence, our assertion is true.
 
-All our assertions are true and their the test arg parser successfully quts and return `OK(())`
+All our assertions are true, and the test arg parser successfully quits and returns OK(()).
