@@ -20,7 +20,7 @@ pub struct MpTable {
     cpu_num: u8,
 }
 ```
-`cpu_num` allows the configuring of the number of vCPUs. `irq_num` refers to the number of intrurpt requests allowed within the configuration.
+`cpu_num` allows configuring of the number of vCPUs. `irq_num` refers to the number of interrupt requests allowed within the configuration.
 
 
 ## Writing the MP Table in guest memory.
@@ -42,14 +42,14 @@ Here the `base_mp` keeps track of the next record in the table, it is intialised
 
 > I/O APICs contain a redirection table, which is used to route the interrupts it receives from peripheral buses to one or more local APICs. 
 
-A memory object is further initialised with the relevant parameters. A `MpfIntel` object is defined using prefefined values for `signature`, `length` and `specification`. Checksum for this allocation is calculated and stored. The object is written in the memory and the memory pointer moved to the next location. We note the starting point here with the following statements. A space is left in the middle for the header which will be added after the rest of the configuration.
+A memory object is further initialised with relevant parameters. A `MpfIntel` object is defined using predefined values for `signature`, `length` and `specification`. Checksum for this allocation is calculated and stored. The object is written in the memory and the memory pointer moved to the next location. We note the starting point here with the following statements. A space is left in the middle for the header which will be added after the rest of the configuration.
 
 ```rust
 let table_base = base_mp;
 base_mp = base_mp.unchecked_add(mem::size_of::<MpcTable>() as u64);
 ```
 
-Base pointer for the table is now set where all the specification of the virtualised resources shall be saved. Each of the vCPUs when stored in the table are allocated with the following data as per the intel spec. This is the written into the current `base_mp` value and the value is moved to the next available space.
+Base pointer for the table is now set where all the specification of the virtualised resources shall be saved. Each of the vCPUs when stored in the table are allocated with the following data as per the intel spec. This is written into the current `base_mp` value and the value is moved to the next available space.
 ```rust
 for cpu_id in 0..self.cpu_num {
     let mpc_cpu = MpcCpu(mpspec::mpc_cpu {
@@ -67,7 +67,7 @@ for cpu_id in 0..self.cpu_num {
         ..Default::default()
 });
 ```
-The are defined as follows 
+These are defined as follows 
 | Field | Description| 
 | ----------- | ----------- |
 | ENTRY TYPE | A value of 0 identifies a processor entry. |
