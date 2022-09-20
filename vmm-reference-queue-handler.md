@@ -1,6 +1,8 @@
 # [Queue Handler](https://github.com/codenet/vmm-reference/blob/main/src/devices/src/virtio/net/queue_handler.rs)
 
-`Queue Handler` uses Simple Handler for handling RX\TX Queues
+`Queue Handler` handles the Receiving and Transmitting Queues and it does so by using the Simple Handler.
+
+[Simple Handler](https://github.com/codenet/vmm-reference/blob/main/src/devices/src/virtio/net/simple_handler.rs) struct contains methods (`send_frame`, `write_frame`...) for handling these queues. 
 
 ``` rs
 pub struct QueueHandler<M: GuestAddressSpace> {
@@ -28,11 +30,11 @@ const RX_IOEVENT_DATA: u32 = 1;
 const TX_IOEVENT_DATA: u32 = 2;
 ```
 
-1. `TAPFD_DATA`: Signies the event of processing tap (`process_tap`)
+1. `TAPFD_DATA`: Signifies the event of processing tap (`process_tap`)
 
-2. `RX_IOEVENT_DATA`: Signies the event of processing Rx queue (`process_rxq`)
+2. `RX_IOEVENT_DATA`: Signifies the event of processing Rx queue (`process_rxq`)
 
-3. `TX_IOEVENT_DATA`: Signies the event of processing Tx queue (`process_txq`)
+3. `TX_IOEVENT_DATA`: Signifies the event of processing Tx queue (`process_txq`)
 
 <br>
 
