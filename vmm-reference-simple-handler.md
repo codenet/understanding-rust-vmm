@@ -19,14 +19,14 @@ __A brief overview of all the struct variables:__
 
 1. `driver_notify:`
     
-    A SignalUsedQueue object to model the operation of signalling the driver about used events. It should implement a method named `signal_used_queue` that takes parameter `index` and notifies the driver about index. Index values used here in SimpleHandler are `RXQ_INDEX` (for receiving) and `TXQ_INDEX` (for transmitting).
+    A SignalUsedQueue object to model the operation of signaling the driver about used events. It should implement a method named `signal_used_queue` that takes a parameter `index` and notifies the driver about index. Index values used here in SimpleHandler are `RXQ_INDEX` (for receiving) and `TXQ_INDEX` (for transmitting).
 
 2. `rxq:`  Recieving queue of `GuestAddressSpace`
 3. `rxbuf_current:` Number of bytes in `rxbuf` 
 4. `rxbuf:` Recieving buffer of maximum size `MAX_BUFFER_SIZE`
 5. `txq:`  Transmit queue of `GuestAddressSpace`
 6. `txbuf:` Transmit buffer of maximum size `MAX_BUFFER_SIZE`
-7. `tap:` Object of Tap struct that wraps the file descriptor for the tap device so methods can run ioctls on the interface
+7. `tap:` Object of the Tap struct that wraps the file descriptor for the tap device so methods can run ioctls on the interface
 
 ```rs
 const MAX_BUFFER_SIZE: usize = 65562;
@@ -63,7 +63,7 @@ Incomping Packet Size
         &nbsp;&nbsp;&nbsp;&nbsp;&thinsp;
         65550 bits
     <br>
-        <div align = "center">65562 bits</dev>
+        <div align = "center">Total = 65562 bits</dev>
       </td>
     </tr>
 </table>
@@ -75,7 +75,7 @@ __A brief overview of all the struct methods:__
 ```rs
 pub fn new(driver_notify: S, rxq: Queue<M>, txq: Queue<M>, tap: Tap) -> Self
 ```
-Creates a SimpleHandler with provided driver_notify, rxq, txq and tap. Sets rxbuf_current and all entries of Tx and Rx buffers to 0.
+Creates a SimpleHandler with the provided driver_notify, rxq, txq and tap. Sets rxbuf_current and all entries of Tx and Rx buffers to 0.
 
 2. `write_frame_to_guest:`
 
@@ -92,7 +92,7 @@ Writes elements in Rx buffer to Rx queue. Also performs multiple checks in betwe
 pub fn process_tap(&mut self) -> result::Result<(), Error>
 ```
 
-While any of write_frame_to_guest or enable_notification from Rx queue is true, it sets rxbuf_current to value read by tap from Rx buffer (only if rxbuf_current is 0). Finally notifies driver_notify with index as `RXQ_INDEX` if Rx queue needs notification
+While any one of write_frame_to_guest or enable_notification from Rx queue is true, it sets rxbuf_current to the value read by tap from the Rx buffer (only if rxbuf_current is 0). Finally, if the Rx queue requires notification, notifies driver_notify with the index RXQ_INDEX
 
 4. `send_frame_from_chain:`
 ```rs
@@ -107,7 +107,7 @@ Reads elements of Tx queue to Tx buffer sequentially and finally writes Tx buffe
 ```rs
 pub fn process_txq(&mut self) -> result::Result<(), Error> 
 ```
-In a loop it does the following:
+In a loop, it does the following:
 * Disable notification of Tx queue
 * Call send_frame_from_chain on Iterator of Tx queue
 * Notifies driver_notify with index as `TXQ_INDEX` if Tx queue needs notification
