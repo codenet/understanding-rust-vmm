@@ -2,7 +2,7 @@
 
 A brief description of how block devices are implemented in [vmm-reference](https://github.com/codenet/vmm-reference)
 
-Currently, the Block device implemented in this file only uses the Memory Mapped Input/Output (MMIO). A block device is a part of more general virtual io devices present in the `vmm-reference`. It uses many [rust-vmm](https://github.com/rust-vmm) crates and traits such as `vm-virtio` and `vm-device`. We will first see what is the structure of a block device, and then what all methods and traits this strcture implements.
+Currently, the Block device implemented in this file only uses the Memory Mapped Input/Output (MMIO). A block device is a part of more general virtual io devices present in the `vmm-reference`. It uses many [rust-vmm](https://github.com/rust-vmm) crates and traits such as `vm-virtio` and `vm-device`. We will first see what is the structure of a block device, and then what all methods and traits this structure implements.
 
 ## Structure
 
