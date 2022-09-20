@@ -39,7 +39,6 @@ The `Vmm` structure exposes the following public functions:
 
 ```rs 
 let kernel_load_addr = self.compute_kernel_load_addr(&load_result)?; 
-let kernel_load_addr = self.compute_kernel_load_addr(&load_result)?;
 ```
  - Loads the kernel in the guest memory. This function returns a `Result` that contains the `GuestAddress` where the kernel was loaded. This address is used to configure the boot source. If the kernel was loaded successfully, the `Vmm` state is updated to `KernelConfigured`. If the kernel was not loaded successfully, the `Vmm` state is updated to `KernelLoadFailed`. 
 
