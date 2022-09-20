@@ -6,7 +6,7 @@ Described below are the constant headers of the Boot parameters -
 ```rs
 const KERNEL_BOOT_FLAG_MAGIC: u16 = 0xaa55;
 ```
-Header field: `boot_flag`. Must contain 0xaa55. This is the closest thing old Linux kernels have to a magic number. The 0xAA55 signature is the last two bytes of the first sector of your bootdisk (bootsector/Master Boot Record/MBR). If it is 0xAA55, then the BIOS will try booting the system. If it's not found (garbled or 0x0000), you'll get an error message from your BIOS that it didn't find a bootable disk
+Header field: `boot_flag`. Must contain 0xaa55. This is the closest thing old Linux kernels have to a magic number. The 0xAA55 signature is the last two bytes of the first sector of your bootdisk (bootsector/Master Boot Record/MBR). If it is 0xAA55, then the BIOS will try booting the system. If it's not found (garbled or 0x0000), you'll get an error message from your BIOS that it didn't find a bootable disk.
 
 ```rs
 const KERNEL_HDR_MAGIC: u32 = 0x5372_6448;
@@ -35,7 +35,7 @@ Start address for the EBDA (Extended Bios Data Area). Older computers (like the 
 The traditional memory map for the kernel loader, used for Image or
 zImage kernels, typically looks like:
 
-<pre>
+```
 	    |			            |                                           
 0A0000	+------------------------+
 	    |  Reserved for BIOS	|	Do not use.  Reserved for BIOS EBDA.    
@@ -57,7 +57,7 @@ zImage kernels, typically looks like:
 000600	+------------------------+                                          
 	    |  BIOS use only	    |                                           
 000000	+------------------------+                                          
-</pre>
+```
 
 
 ```rs
@@ -85,7 +85,7 @@ fn add_e820_entry(
     mem_type: u32,
 ) -> result::Result<(), Error>
 ```
-This function sets the address, size and memory type in the e820_table of the boot parameters. It will be used in the ```build_bootparams``` function described next.
+This function sets the address, size and memory type in the e820_table of the boot parameters. It will be used in the `build_bootparams` function described next.
 
 ```rs
 pub fn build_bootparams(
