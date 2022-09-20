@@ -20,6 +20,8 @@ pub struct QueueHandler<M: GuestAddressSpace> {
 
 4. `tx_ioevent`: Instance of EventFd that is used to check for any error in reading of Txq
 
+5. `tap`: Object of Tap struct that wraps the file descriptor for the tap device so methods can run ioctls on the interface
+
 <br>
 
 `Constants` used for event matching
@@ -31,6 +33,7 @@ const TX_IOEVENT_DATA: u32 = 2;
 ```
 
 1. `TAPFD_DATA`: Signifies the event of processing tap (`process_tap`)
+    * `process_tap`: it sets rxbuf_current (receiving buffer) to the value read by tap from the Rx buffer.
 
 2. `RX_IOEVENT_DATA`: Signifies the event of processing Rx queue (`process_rxq`)
 
