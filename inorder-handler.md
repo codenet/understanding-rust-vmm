@@ -14,8 +14,8 @@ virtIO is a virtualization standard for network and disk device drivers. It was 
 ### Inorder-handler: 
 
 - This object is used to process the queue of a block device without making any assumptions about the notification mechanism.
-- For time being they used sepecific backend 'StdIoBackend' but in furture they wanted to implement the more generic and flexible one.
-- This queuehandler takes the request and process the request. Return the requests in the same order in which they received.
+- For the time being, it uses a special backend called "StdIoBackend", but in the future it will implement the more generic and flexible one.
+- This queuehandler takes the request and processes it. Return the requests in the same order in which they were received.
 ```rs
 pub struct InOrderQueueHandler<M: GuestAddressSpace, S: SignalUsedQueue> {
     pub driver_notify: S,
@@ -26,8 +26,8 @@ pub struct InOrderQueueHandler<M: GuestAddressSpace, S: SignalUsedQueue> {
 
 - In this process_queue implementation, we follow various steps:
   - First, we disable the notification event from guest drivers.  
-  - Then, we process the available chain of request through process_chain method.  
-  - If notification is enabled, then we process next set of chain of request.  
+  - Then, we process the available chain of requests through the process_chain method.  
+  - If notification is enabled, then we process the next set of requests in the chain.  
 
 ```
     pub fn process_queue(&mut self) -> result::Result<(), Error> {
@@ -50,8 +50,8 @@ pub struct InOrderQueueHandler<M: GuestAddressSpace, S: SignalUsedQueue> {
 ```
 
 
-- In this process_chain implementation, we take each request from chain of requests assuming there is no request parse error.   
-- Then, process each request and write into memory buffer.
+- In this process_chain implementation, we take each request from the chain of requests, assuming there is no request parse error.
+- Then, process each request and write it into the memory buffer.
 ```
 fn process_chain(&mut self, mut chain: DescriptorChain<M::T>) -> result::Result<(), Error> {
         let used_len = match Request::parse(&mut chain) {
@@ -63,8 +63,7 @@ fn process_chain(&mut self, mut chain: DescriptorChain<M::T>) -> result::Result<
         };
 ```
 
-- After processing each request, it used to update the used ring through chain descriptor and the total length of the descriptor chain which was used (written to). It is also sent the notification if needed, based on request.
-```
+- After processing each request, it is used to update the used ring through the chain descriptor and the total length of the descriptor chain that was used (written to). It is also sent the notification if needed, based on request.
 self.queue.add_used(chain.head_index(), used_len)?;
 
         if self.queue.needs_notification()? {
