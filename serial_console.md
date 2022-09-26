@@ -76,7 +76,7 @@ impl TryFrom<VMMConfig> for Vmm {
     ...
 }
 ```
-The serial console object created is then registered to the device manager using `register_pio` method for the specific range of address `0x3f8..0x3f8 + 8`, so that it can store the mapping of address range to device and whenever some request for the addrress arrives, it can check for the concerned device.
+The serial console object created is then registered to the device manager using `register_pio` method for the specific range of address `0x3f8..0x3f8 + 8`, so that it can store the mapping of address range to device and whenever some request for the address arrives, it can check for the concerned device.
 ```rust
 impl<T> PioManager for T
 where
@@ -202,4 +202,4 @@ pub fn read(&mut self, offset: u8) -> u8 {
     }
 ...
 ```
-The `byte` returned by the read method is then stored in the buffer passed passed as an argument passed by the `Vcpu_fd.run`.
+The `byte` returned by the read method is then stored in the buffer passed as an argument by the `Vcpu_fd.run`.
